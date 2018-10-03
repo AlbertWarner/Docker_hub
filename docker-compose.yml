@@ -1,0 +1,32 @@
+version: '3'
+# MAINTAINER: Albert Warner <warnaa1@student.op.ac.nz>
+services:
+    flaskapp:
+        image: albertwarner/flaskapp
+        networks:
+            - app
+        command: python myproject.py
+        deploy:
+            replicas: 3
+
+    nginx:
+        image: albertwarner/nginx
+        ports:
+            - 8080:80
+        networks:
+            - app
+        depends_on:
+            - flaskapp
+        deploy:
+            replicas: 1
+
+    redis:
+        image: redis
+        networks: 
+             - app
+        deploy:
+            replicas: 1
+     
+networks:
+    app:
+        driver: overlay
